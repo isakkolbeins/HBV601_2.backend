@@ -50,7 +50,9 @@ public class TransactionManagementServiceImplementation implements TransactionMa
 
         // For every account, find all transactions and add them to the list
         for (Account account : accounts ) {
-            allTransactions.addAll(account.getTransactionList());
+            for (Long trasactionId: account.getTransactionList()){
+                allTransactions.add(repository.getOne(trasactionId));
+            }
         }
 
         //Sort the transactions by date and reverse the order showing the newest first

@@ -29,10 +29,8 @@ public class UserManagementServiceImplementation implements UserManagementServic
 
         //Encrypt the password
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        //No admin functionality so all users get the user role
-        user.setRole("ROLE_USER");
         //Initialize the friendlist
-        List<User> friendlist = new ArrayList<>();
+        ArrayList<Long> friendlist = new ArrayList<Long>();
         user.setFriendlist(friendlist);
 
         return repository.save(user);
@@ -61,18 +59,18 @@ public class UserManagementServiceImplementation implements UserManagementServic
     @Override
     public void addFriend(User user, User friend) {
 
-        List<User> userFriends = user.getFriendlist();
+        ArrayList<Long> userFriends = user.getFriendlist();
         if (userFriends == null){
-            userFriends = new ArrayList<User>();
+            userFriends = new ArrayList<Long>();
         }
-        userFriends.add(friend);
+        userFriends.add(friend.getId());
         user.setFriendlist(userFriends);
 
-        List<User> friendFriends = friend.getFriendlist();
+        ArrayList<Long> friendFriends = friend.getFriendlist();
         if (friendFriends == null){
-            friendFriends = new ArrayList<User>();
+            friendFriends = new ArrayList<Long>();
         }
-        friendFriends.add(user);
+        friendFriends.add(user.getId());
         friend.setFriendlist(friendFriends);
 
         repository.save(user);

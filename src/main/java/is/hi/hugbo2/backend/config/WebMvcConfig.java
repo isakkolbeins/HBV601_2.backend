@@ -18,5 +18,7 @@ public class WebMvcConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception
     {
         security.httpBasic().disable();
+        security.antMatcher("/public/**").csrf().disable();
+        security.antMatcher("/rest/**").csrf().disable();
     }
 }

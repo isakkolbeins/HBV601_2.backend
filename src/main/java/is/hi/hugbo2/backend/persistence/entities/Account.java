@@ -1,5 +1,6 @@
 package is.hi.hugbo2.backend.persistence.entities;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * The class for the Account
@@ -11,12 +12,15 @@ import java.util.List;
 public class Account  {
     // Declare that this attribute is the id
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "accountGenerator", sequenceName = "ACCOUNT_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountGenerator")
     @Column(name = "accountId", updatable = false, nullable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private List<Transaction> transactionList;
+    // @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    // @ElementCollection
+    // @CollectionTable(name="id")
+    private ArrayList<Long> transactionList;
 
     private String user1;
     private String user2;
@@ -29,6 +33,7 @@ public class Account  {
     public Account(String user1, String user2) {
         this.user1 = user1;
         this.user2 = user2;
+        this.transactionList = new ArrayList<>();
     }
 
     public String getUser1() {
@@ -44,11 +49,11 @@ public class Account  {
         return user2;
     }
 
-    public List<Transaction> getTransactionList() {
+    public ArrayList<Long> getTransactionList() {
         return transactionList;
     }
 
-    public void setTransactionList(List<Transaction> transactionList) {
+    public void setTransactionList(ArrayList<Long> transactionList) {
         this.transactionList = transactionList;
     }
 

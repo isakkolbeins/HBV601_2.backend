@@ -13,7 +13,8 @@ import java.util.List;
 public class User {
     // Declare that this attribute is the id
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "userGenerator", sequenceName = "USER_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userGenerator")
     @Column(name = "userid", updatable = false, nullable = false)
     private Long id;
 
@@ -22,13 +23,13 @@ public class User {
     private String lastname;
     private String email;
     private String password;
-    private String role;
 
-    @ManyToMany
-    private List<User> friendlist = null;
+    // @OneToMany(targetEntity=User.id, mappedBy="college", fetch=FetchType.EAGER)
+    // @ElementCollection
+    // @CollectionTable(name="id")
+    private ArrayList<Long> friendlist = null;
 
-    public List getFriendlist() {
-
+    public ArrayList<Long> getFriendlist() {
         return friendlist;
     }
 
@@ -83,16 +84,7 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-
-    public void setFriendlist(List<User> friendlist) {
+    public void setFriendlist(ArrayList<Long> friendlist) {
         this.friendlist = friendlist;
     }
 

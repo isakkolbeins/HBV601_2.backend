@@ -1,15 +1,16 @@
 package is.hi.hugbo2.backend.controllers;
 
 import com.google.gson.Gson;
+import is.hi.hugbo2.backend.persistence.entities.Account;
+import is.hi.hugbo2.backend.persistence.entities.Transaction;
 import is.hi.hugbo2.backend.persistence.entities.User;
 import is.hi.hugbo2.backend.service.AccountManagementService;
 import is.hi.hugbo2.backend.service.TransactionManagementService;
 import is.hi.hugbo2.backend.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import sun.rmi.runtime.Log;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 public class mainContoller {
@@ -34,25 +35,76 @@ public class mainContoller {
         this.gson = gson;
     }
 
-    @GetMapping("/user")
-    public String getUser(@RequestParam("id") String id){
+    // User ---
+    @PostMapping("/user/new")
+    public String saveUser(@RequestBody User newUser){
 
-        User currUser = userManagementService.findByUserId(Long.parseLong(id));
+        // Validate username ??
 
-        String jsonUser =  gson.toJson(currUser);
-        System.out.println(jsonUser);
-
-        return "user: "+ currUser.getFirstname()+ " gson: " ;
+        return gson.toJson(userManagementService.save(newUser));
+    }
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable("userId") Long userId){
+        return gson.toJson(userManagementService.findByUserId(userId));
     }
 
-    @GetMapping("/transaction")
-    public String getTransaction(@RequestParam("id") String id){
-        return "transaction with id ="+ id;
+
+
+
+    // Transaction ---
+    @PostMapping("/transaction/new")
+    public String saveTransaction(@RequestBody Transaction newTransaction){
+        Transaction savedTrans = transactionManagementService.save(newTransaction);
+        Long accountId = savedTrans.getAccount();
+        System.out.println(" ------ DEBUG ---------");
+        System.out.println(accountId);
+
+        Account currAccount = accountManagementService.findOne(accountId);
+        System.out.println(currAccount);
+
+        ArrayList<Long> transactionList = currAccount.getTransactionList();
+        System.out.println(transactionList);
+
+        transactionList.add(newTransaction.getId());
+        currAccount.setTransactionList(transactionList);
+        accountManagementService.save(currAccount);
+        return gson.toJson(savedTrans);
+    }
+    @GetMapping("/transaction/{transactionId}")
+    public String getTransaction(@PathVariable("transactionId") Long transactionId){
+        return gson.toJson(transactionManagementService.findOne(transactionId));
     }
 
-    @GetMapping("/account")
-    public String getAccount(@RequestParam("id") String id){
-        return "account with id ="+ id;
+
+
+    @PostMapping("/user/{userId}/add/{friendName}")
+    public String addFriend(@PathVariable ("userId") Long userId, @PathVariable("friendName") String friendName){
+
+        User myUser = userManagementService.findByUserId(userId);
+        User friend = userManagementService.findByUsername(friendName);
+
+        if (friend == null) {
+            return "{error: 'no user with username: " + friendName+ "' }";
+        } else if (myUser.getFriendlist().contains(friendName)){
+            return "{error: 'user with username: " + friendName+ " is already your friend' }";
+        }
+        Account newAccount = new Account(myUser.getUsername(), friendName);
+        newAccount.setNetBalance(0.0);
+        newAccount = accountManagementService.save(newAccount);
+        userManagementService.addFriend(myUser, friend);
+        return gson.toJson(newAccount);
+    }
+
+
+    @GetMapping("/account/{accountId}")
+    public String getAccountInfo(@PathVariable("accountId") Long accountId){
+        return gson.toJson(accountManagementService.findOne(accountId));
+    }
+
+    @GetMapping("/user/{userId}/accounts")
+    public String getAccount(@PathVariable("userId") Long userId){
+        User myUser = userManagementService.findByUserId(userId);
+        return gson.toJson(accountManagementService.findByUsername(myUser.getUsername()));
     }
 
 

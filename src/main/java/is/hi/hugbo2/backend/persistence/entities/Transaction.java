@@ -10,7 +10,8 @@ public class Transaction {
 
     // Declare that this attribute is the id and auto generate
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "transactionGenerator", sequenceName = "TRANSACTION_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionGenerator")
     @Column(name = "transactionId", updatable = false, nullable = false)
     private Long id;
 
@@ -20,8 +21,8 @@ public class Transaction {
     private Boolean ignored;
 
     //JPA relationship to account
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account account;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    private Long accountId;
 
     private Double amount;
     private String descr;
@@ -41,12 +42,13 @@ public class Transaction {
 
     /**
      * default  constructor
-     * @param account
+     * @param accountId
      * @param amount
      */
-    public Transaction(Account account, Double amount) {
-        this.account = account;
+    public Transaction(Long accountId, Double amount, String descr) {
+        this.accountId = accountId;
         this.amount = amount;
+        this.descr = descr;
     }
 
     /**
@@ -91,9 +93,9 @@ public class Transaction {
     }
     public List<String> getSplitInfo() {return splitInfo;}
     public void setSplitInfo(List<String> splitInfo) {this.splitInfo = splitInfo;}
-    public Account getAccount() {
-        return account;
+    public Long getAccount() {
+        return accountId;
     }
-    public void setAccount(Account account) {this.account = account;}
+    public void setAccount(Long accountId) {this.accountId = accountId;}
     public Date getDate() {return date;}
 }
