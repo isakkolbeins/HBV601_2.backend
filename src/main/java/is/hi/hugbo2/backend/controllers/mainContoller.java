@@ -81,7 +81,7 @@ public class mainContoller {
 
         if (friend == null) {
             return "{error: 'no user with username: " + friendName+ "' }";
-        } else if (myUser.getFriendlist().contains(friendName)){
+        } else if (myUser.getFriendlist().contains(friend.getId())){
             return "{error: 'user with username: " + friendName+ " is already your friend' }";
         }
         Account newAccount = new Account(myUser.getUsername(), friendName);
