@@ -48,28 +48,31 @@ public class mainContoller {
         return gson.toJson(userManagementService.findByUserId(userId));
     }
 
+    @GetMapping("/users/")
+    public String getAllUsers(){
+        return gson.toJson(userManagementService.);
+    }
+
 
 
 
     // Transaction ---
     @PostMapping("/transaction/new")
     public String saveTransaction(@RequestBody Transaction newTransaction){
+
         Transaction savedTrans = transactionManagementService.save(newTransaction);
-        Long accountId = savedTrans.getAccount();
-        System.out.println(" ------ DEBUG ---------");
-        System.out.println(accountId);
+        Long accountId = savedTrans.getAccountId();
 
         Account currAccount = accountManagementService.findOne(accountId);
-        System.out.println(currAccount);
-
         ArrayList<Long> transactionList = currAccount.getTransactionList();
-        System.out.println(transactionList);
-
+        Double currBalance = currAccount.getNetBalance();
         transactionList.add(newTransaction.getId());
         currAccount.setTransactionList(transactionList);
+        currAccount.setNetBalance(currBalance + savedTrans.getAmount());
         accountManagementService.save(currAccount);
         return gson.toJson(savedTrans);
     }
+
     @GetMapping("/transaction/{transactionId}")
     public String getTransaction(@PathVariable("transactionId") Long transactionId){
         return gson.toJson(transactionManagementService.findOne(transactionId));

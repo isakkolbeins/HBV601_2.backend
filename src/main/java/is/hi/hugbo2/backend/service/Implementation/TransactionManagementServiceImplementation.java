@@ -29,7 +29,6 @@ public class TransactionManagementServiceImplementation implements TransactionMa
 
     @Override
     public Transaction save(Transaction Transaction) {
-
         return repository.save(Transaction);
     }
 
@@ -50,8 +49,8 @@ public class TransactionManagementServiceImplementation implements TransactionMa
 
         // For every account, find all transactions and add them to the list
         for (Account account : accounts ) {
-            for (Long trasactionId: account.getTransactionList()){
-                allTransactions.add(repository.getOne(trasactionId));
+            for (Long transactionId: account.getTransactionList()){
+                allTransactions.add(repository.getOne(transactionId));
             }
         }
 

@@ -14,13 +14,12 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionGenerator")
     @Column(name = "transactionId", updatable = false, nullable = false)
     private Long id;
-
     private Long splitId;
 
     private Boolean confirmed;
     private Boolean ignored;
 
-    //JPA relationship to account
+    // JPA relationship to account
     // @ManyToOne(fetch = FetchType.LAZY)
     private Long accountId;
 
@@ -49,6 +48,7 @@ public class Transaction {
         this.accountId = accountId;
         this.amount = amount;
         this.descr = descr;
+
     }
 
     /**
@@ -93,9 +93,9 @@ public class Transaction {
     }
     public List<String> getSplitInfo() {return splitInfo;}
     public void setSplitInfo(List<String> splitInfo) {this.splitInfo = splitInfo;}
-    public Long getAccount() {
+    public Long getAccountId() {
         return accountId;
     }
-    public void setAccount(Long accountId) {this.accountId = accountId;}
+    public void setAccountId(Long accountId) {this.accountId = accountId;}
     public Date getDate() {return date;}
 }
