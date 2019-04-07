@@ -47,14 +47,7 @@ public class mainContoller {
     public String getUser(@PathVariable("userId") Long userId){
         return gson.toJson(userManagementService.findByUserId(userId));
     }
-
-    @GetMapping("/users/")
-    public String getAllUsers(){
-        return gson.toJson(userManagementService.);
-    }
-
-
-
+    
 
     // Transaction ---
     @PostMapping("/transaction/new")
