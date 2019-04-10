@@ -21,12 +21,9 @@ friendlist: [4,2,3]
 }
 ```
 
-##### Post - / login
-example: / login
+##### Get - / login / {username}
+example: / login / sara
 
-```
-body: {userId}
-```
 
 ```
 response: 

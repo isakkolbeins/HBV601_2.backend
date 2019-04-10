@@ -47,11 +47,10 @@ public class mainContoller {
     }
 
 
-    @PostMapping("/login")
-    public String saveUser(@RequestBody String username ){
+    @GetMapping("/login/{username}")
+    public String saveUser(@PathVariable("username") String username ){
 
         // Validate pw ??
-
         return gson.toJson(userManagementService.findByUsername(username));
     }
 
