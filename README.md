@@ -21,6 +21,25 @@ friendlist: [4,2,3]
 }
 ```
 
+##### Post - / login
+example: / login
+
+```
+body: {userId}
+```
+
+```
+response: 
+{
+id: 1,
+username: "sara",
+firstname: "sara",
+lastname: "queen",
+email: "sara.com",
+password: "$2a$10$Jxjd8sIzPYvBGPOHf5Ze5eS.78xjQIkNaOO1t3z6eSnOeXyf8MFXi",
+friendlist: [4,2,3]
+}
+```
 
 ##### Get - / user / {userID} / account / {accountId}
 example: / user / {userID} / account / 3

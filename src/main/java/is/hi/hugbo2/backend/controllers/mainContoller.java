@@ -40,10 +40,22 @@ public class mainContoller {
     @PostMapping("/user/new")
     public String saveUser(@RequestBody User newUser){
 
+
         // Validate username ??
 
         return gson.toJson(userManagementService.save(newUser));
     }
+
+
+    @PostMapping("/login")
+    public String saveUser(@RequestBody String username ){
+
+        // Validate pw ??
+
+        return gson.toJson(userManagementService.findByUsername(username));
+    }
+
+
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable("userId") Long userId){
         return gson.toJson(userManagementService.findByUserId(userId));
