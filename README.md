@@ -22,8 +22,8 @@ friendlist: [4,2,3]
 ```
 
 
-##### Get - / account / {accountId}
-example: / account / 3
+##### Get - / user / {userID} / account / {accountId}
+example: / user / {userID} / account / 3
 
 ```
 response: 
@@ -45,38 +45,16 @@ example: / user / 1 / accounts
 ```
 response: 
 [
-{
-id: 2,
-transactionList: [ ],
-user1: "sara",
-user2: "isak",
-netBalance: 0
-},
-{
-id: 1,
-transactionList: [
 2,
-4
-],
-user1: "sara",
-user2: "frida",
-netBalance: 0
-},
-{
-id: 3,
-transactionList: [
+1,
+3,
 5
-],
-user1: "sara",
-user2: "julli",
-netBalance: 666
-}
 ]
 ```
 
 
-##### Get - / transaction / {transactionId}
-example: / transaction / 3
+##### Get - / user / {userId} / transaction / {transactionId}
+example: / user / 5 / transaction / 3
 
 ```
 response: 
@@ -135,12 +113,12 @@ response:
 ```
 
 
-##### Post - / transaction / new
-example: / transaction / new
+##### Post - / user / {userId} / transaction / new
+example: / user / 5 / transaction / new
 ```
 body: 
 {
-	"accountId": "6",
+    "accountId": "6",
     "amount": "500",
     "descr": "test ---- "
 }

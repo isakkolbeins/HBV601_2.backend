@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class mainContoller {
@@ -50,27 +51,42 @@ public class mainContoller {
 
 
     // Transaction ---
-    @PostMapping("/transaction/new")
-    public String saveTransaction(@RequestBody Transaction newTransaction){
+    @PostMapping("user/{userId}/transaction/new")
+    public String saveTransaction(@PathVariable("userId") Long userId, @RequestBody Transaction newTransaction){
 
+        Account currAccount = accountManagementService.findOne(newTransaction.getAccountId());
+        User myUser = userManagementService.findByUserId(userId);
         Transaction savedTrans = transactionManagementService.save(newTransaction);
-        Long accountId = savedTrans.getAccountId();
 
-        Account currAccount = accountManagementService.findOne(accountId);
+        // Long accountId = savedTrans.getAccountId();
         ArrayList<Long> transactionList = currAccount.getTransactionList();
-        Double currBalance = currAccount.getNetBalance();
         transactionList.add(newTransaction.getId());
         currAccount.setTransactionList(transactionList);
-        currAccount.setNetBalance(currBalance + savedTrans.getAmount());
+
+        Double currBalance = currAccount.getNetBalance();
+        if (currAccount.getUser1().equals(myUser.getUsername())) {
+            currAccount.setNetBalance(currBalance - newTransaction.getAmount());
+        }
+        else {
+            currAccount.setNetBalance(currBalance + newTransaction.getAmount());
+        }
         accountManagementService.save(currAccount);
         return gson.toJson(savedTrans);
     }
 
-    @GetMapping("/transaction/{transactionId}")
-    public String getTransaction(@PathVariable("transactionId") Long transactionId){
-        return gson.toJson(transactionManagementService.findOne(transactionId));
-    }
+    @GetMapping("/user/{userId}/transaction/{transactionId}")
+    public String getTransaction(@PathVariable ("userId") Long userId, @PathVariable("transactionId") Long transactionId){
 
+        User myUser = userManagementService.findByUserId(userId);
+        Transaction currTransaction = transactionManagementService.findOne(transactionId);
+        Account currAccount = accountManagementService.findOne(transactionId);
+        if (currAccount.getUser1().equals(myUser.getUsername())) {
+            currTransaction.setAmount(-1 *currTransaction.getAmount());
+        }
+
+
+        return gson.toJson(currTransaction);
+    }
 
 
     @PostMapping("/user/{userId}/add/{friendName}")
@@ -92,16 +108,29 @@ public class mainContoller {
     }
 
 
-    @GetMapping("/account/{accountId}")
-    public String getAccountInfo(@PathVariable("accountId") Long accountId){
-        return gson.toJson(accountManagementService.findOne(accountId));
+    @GetMapping("/user/{userId}/account/{accountId}")
+    public String getAccountInfo(@PathVariable("userId") Long userId, @PathVariable("accountId") Long accountId){
+        Account currAccount = accountManagementService.findOne(accountId);
+        User myUser = userManagementService.findByUserId(userId);
+        // user  * -1  --- user 2 normal
+        if (currAccount.getUser1().equals(myUser.getUsername())) {
+            System.out.println("runnarstuff");
+            currAccount.setNetBalance(-1*currAccount.getNetBalance());
+        }
+        return gson.toJson(currAccount);
     }
 
     @GetMapping("/user/{userId}/accounts")
-    public String getAccount(@PathVariable("userId") Long userId){
+    public String getAccounts(@PathVariable("userId") Long userId){
         User myUser = userManagementService.findByUserId(userId);
-        return gson.toJson(accountManagementService.findByUsername(myUser.getUsername()));
+        List<Account> accountList = accountManagementService.findByUsername(myUser.getUsername());
+        Long[] accountIdList = new Long[accountList.size()];
+        for (int i = 0; i < accountList.size(); i++){
+            accountIdList[i] = accountList.get(i).getId();
+        }
+        return gson.toJson(accountIdList);
     }
+
 
 
 }
