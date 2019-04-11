@@ -110,6 +110,8 @@ public class mainContoller {
             return "{error: 'no user with username: " + friendName+ "' }";
         } else if (myUser.getFriendlist().contains(friend.getId())){
             return "{error: 'user with username: " + friendName+ " is already your friend' }";
+        } else if (myUser == friend){
+            return "{error: '"+ friendName + " s your username silly' }";
         }
         Account newAccount = new Account(myUser.getUsername(), friendName);
         newAccount.setNetBalance(0.0);
@@ -135,11 +137,13 @@ public class mainContoller {
     public String getAccounts(@PathVariable("userId") Long userId){
         User myUser = userManagementService.findByUserId(userId);
         List<Account> accountList = accountManagementService.findByUsername(myUser.getUsername());
-        Long[] accountIdList = new Long[accountList.size()];
+        String[] accountIdList = new String[accountList.size()];
+        //String accountIdList = "";
         for (int i = 0; i < accountList.size(); i++){
-            accountIdList[i] = accountList.get(i).getId();
+            accountIdList[i] = accountList.get(i).getId().toString();
+            //accountIdList = accountIdList + ", " + accountList.get(i).getId();
         }
-        return gson.toJson(accountIdList);
+        return "{accounts: [" + String.join(",", accountIdList) +"]}";
     }
 
 

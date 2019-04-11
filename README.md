@@ -60,12 +60,7 @@ example: / user / 1 / accounts
 
 ```
 response: 
-[
-2,
-1,
-3,
-5
-]
+{ accounts:[2,1,3,5] }
 ```
 
 
