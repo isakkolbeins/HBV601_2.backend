@@ -91,7 +91,7 @@ public class mainContoller {
         User myUser = userManagementService.findByUserId(userId);
         Transaction currTransaction = transactionManagementService.findOne(transactionId);
         Account currAccount = accountManagementService.findOne(transactionId);
-        if (currAccount.getUser1().equals(myUser.getUsername())) {
+        if (currAccount.getUser2().equals(myUser.getUsername())) {
             currTransaction.setAmount(-1 *currTransaction.getAmount());
         }
 
