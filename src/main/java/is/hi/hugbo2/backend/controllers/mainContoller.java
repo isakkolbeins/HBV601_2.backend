@@ -76,11 +76,9 @@ public class mainContoller {
 
         Double currBalance = currAccount.getNetBalance();
         if (currAccount.getUser1().equals(myUser.getUsername())) {
-            currAccount.setNetBalance(currBalance - newTransaction.getAmount());
+            newTransaction.setAmount(-1*newTransaction.getAmount());
         }
-        else {
-            currAccount.setNetBalance(currBalance + newTransaction.getAmount());
-        }
+        currAccount.setNetBalance(currBalance + newTransaction.getAmount());
         accountManagementService.save(currAccount);
         return gson.toJson(savedTrans);
     }
@@ -91,10 +89,9 @@ public class mainContoller {
         User myUser = userManagementService.findByUserId(userId);
         Transaction currTransaction = transactionManagementService.findOne(transactionId);
         Account currAccount = accountManagementService.findOne(transactionId);
-        if (currAccount.getUser2().equals(myUser.getUsername())) {
-            currTransaction.setAmount(-1 *currTransaction.getAmount());
+        if (currAccount.getUser1().equals(myUser.getUsername())) {
+            currTransaction.setAmount( -1*currTransaction.getAmount());
         }
-
 
         return gson.toJson(currTransaction);
     }
@@ -111,7 +108,7 @@ public class mainContoller {
         } else if (myUser.getFriendlist().contains(friend.getId())){
             return "{error: 'user with username: " + friendName+ " is already your friend' }";
         } else if (myUser == friend){
-            return "{error: '"+ friendName + " s your username silly' }";
+            return "{error: '"+ friendName + " is your username silly' }";
         }
         Account newAccount = new Account(myUser.getUsername(), friendName);
         newAccount.setNetBalance(0.0);
@@ -127,7 +124,6 @@ public class mainContoller {
         User myUser = userManagementService.findByUserId(userId);
         // user  * -1  --- user 2 normal
         if (currAccount.getUser1().equals(myUser.getUsername())) {
-            System.out.println("runnarstuff");
             currAccount.setNetBalance(-1*currAccount.getNetBalance());
         }
         return gson.toJson(currAccount);
