@@ -62,14 +62,14 @@ public class mainContoller {
         Transaction savedTrans = transactionManagementService.save(newTransaction);
 
         ArrayList<Long> transactionList = currAccount.getTransactionList();
-        transactionList.add(newTransaction.getId());
+        transactionList.add(savedTrans.getId());
         currAccount.setTransactionList(transactionList);
 
         Double currBalance = currAccount.getNetBalance();
         if (currAccount.getUser1().equals(myUser.getUsername())) {
-            newTransaction.setAmount(-1*newTransaction.getAmount());
+            savedTrans.setAmount(-1*savedTrans.getAmount());
         }
-        currAccount.setNetBalance(currBalance + newTransaction.getAmount());
+        currAccount.setNetBalance(currBalance + savedTrans.getAmount());
         accountManagementService.save(currAccount);
         return gson.toJson(savedTrans);
     }
@@ -77,12 +77,12 @@ public class mainContoller {
     // Gets transaction by id
     @GetMapping("/user/{userId}/transaction/{transactionId}")
     public String getTransaction(@PathVariable ("userId") Long userId, @PathVariable("transactionId") Long transactionId){
-
         User myUser = userManagementService.findByUserId(userId);
         Transaction currTransaction = transactionManagementService.findOne(transactionId);
-        Account currAccount = accountManagementService.findOne(transactionId);
+        Account currAccount = accountManagementService.findOne(currTransaction.getAccountId());
+        Double currAmount = currTransaction.getAmount();
         if (currAccount.getUser1().equals(myUser.getUsername())) {
-            currTransaction.setAmount( -1*currTransaction.getAmount());
+            currTransaction.setAmount( -1*currAmount);
         }
         return gson.toJson(currTransaction);
     }
