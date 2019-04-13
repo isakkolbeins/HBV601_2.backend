@@ -39,7 +39,7 @@ friendlist: [4,2,3]
 ```
 
 ##### Get - / user / {userID} / account / {accountId}
-example: / user / {userID} / account / 3
+example: / user / 2 / account / 3
 
 ```
 response: 
