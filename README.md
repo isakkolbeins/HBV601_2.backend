@@ -2,6 +2,18 @@
 
 Backend for the lil bill android app.
 
+## Demo users
+```
+palli
+isak
+frida
+sara
+julli
+andri
+matthias
+```
+
+
 
 ## Routes 
 
