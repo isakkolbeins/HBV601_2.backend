@@ -19,8 +19,7 @@ public class Transaction {
     private Boolean confirmed;
     private Boolean ignored;
 
-    // JPA relationship to account
-    // @ManyToOne(fetch = FetchType.LAZY)
+    // Id of the account the transaction belongs to
     private Long accountId;
 
     private Double amount;

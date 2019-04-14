@@ -24,14 +24,8 @@ public class User {
     private String email;
     private String password;
 
-    // @OneToMany(targetEntity=User.id, mappedBy="college", fetch=FetchType.EAGER)
-    // @ElementCollection
-    // @CollectionTable(name="id")
+    // List of friends user id´s
     private ArrayList<Long> friendlist = null;
-
-    public ArrayList<Long> getFriendlist() {
-        return friendlist;
-    }
 
     public User() {
     }
@@ -84,9 +78,9 @@ public class User {
         this.password = password;
     }
 
-    public void setFriendlist(ArrayList<Long> friendlist) {
-        this.friendlist = friendlist;
-    }
+    public ArrayList<Long> getFriendlist() { return this.friendlist; }
+
+    public void setFriendlist(ArrayList<Long> friendlist) { this.friendlist = friendlist; }
 
     public Long getId() {return id;}
 }

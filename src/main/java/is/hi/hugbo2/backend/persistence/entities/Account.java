@@ -1,7 +1,6 @@
 package is.hi.hugbo2.backend.persistence.entities;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 /**
  * The class for the Account
  * The system generates a table schema based on this class for this entity.
@@ -17,9 +16,7 @@ public class Account  {
     @Column(name = "accountId", updatable = false, nullable = false)
     private Long id;
 
-    // @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    // @ElementCollection
-    // @CollectionTable(name="id")
+    // List of transactionId's from this account
     private ArrayList<Long> transactionList;
 
     private String user1;
